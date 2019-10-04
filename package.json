@@ -50,7 +50,7 @@
     "present": "0.0.6",
     "promise-polyfill": "^3.1.0",
     "style-attr": "^1.0.2",
-    "super-three": "pbmonster/three.js#535d61153b35cc45ff755504667248f250ce1003",
+    "super-three": "pbmonster/three.js#2bec3c9a9a5b42ce06dc7d46cce91ab4a19b63cd",
     "three-bmfont-text": "^2.1.0",
     "webvr-polyfill": "^0.10.10"
   },
