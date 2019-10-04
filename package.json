@@ -29,7 +29,7 @@
     "test:nobrowser": "NO_BROWSER=true npm test",
     "test:node": "mocha --ui tdd tests/node"
   },
-  "repository": "aframevr/aframe",
+  "repository": "pbmonster/8frame",
   "license": "MIT",
   "files": [
     "dist/*",
@@ -50,7 +50,7 @@
     "present": "0.0.6",
     "promise-polyfill": "^3.1.0",
     "style-attr": "^1.0.2",
-    "super-three": "github:pbmonster/three.js",
+    "super-three": "pbmonster/three.js#535d61153b35cc45ff755504667248f250ce1003",
     "three-bmfont-text": "^2.1.0",
     "webvr-polyfill": "^0.10.10"
   },
