@@ -3,7 +3,7 @@
   "version": "0.9.0",
   "description": "A web framework for building virtual reality experiences.",
   "homepage": "https://aframe.io/",
-  "main": "dist/aframe-master.js",
+  "main": "dist/8frame-master.js",
   "scripts": {
     "browserify": "browserify src/index.js -s 'AFRAME' -p browserify-derequire",
     "build": "shx mkdir -p build/ && npm run browserify -- --debug -t [envify --INSPECTOR_VERSION dev] -o build/aframe.js",
