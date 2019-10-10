@@ -78201,26 +78201,31 @@ if (window.XR && typeof window.XR === 'function') {
 // Polyfill `Promise`.
 window.Promise = window.Promise || _dereq_('promise-polyfill');
 
-window.WebVRConfig = window.WebVRConfig || {};
-window.navigator.getVRDisplays = function () { return Promise.resolve([{ displayName: 'noVRDisplay' }]); };
+// window.WebVRConfig = window.WebVRConfig || {};
+// window.navigator.getVRDisplays = function () { return Promise.resolve([{ displayName: 'noVRDisplay' }]); };
 
 // WebVR polyfill
 // Check before the polyfill runs.
-window.hasNativeWebVRImplementation = !!window.navigator.getVRDisplays ||
-                                      !!window.navigator.getVRDevices;
+window.hasNativeWebVRImplementation =
+  !!window.navigator.getVRDisplays || !!window.navigator.getVRDevices;
 window.hasNativeWebXRImplementation = navigator.xr !== undefined;
 
 // If native WebXR or WebVR are defined WebVRPolyfill does not initialize.
-if (!window.hasNativeWebXRImplementation && !window.hasNativeWebVRImplementation) {
+if (
+  !window.hasNativeWebXRImplementation &&
+  !window.hasNativeWebVRImplementation
+) {
   var isIOSOlderThan10 = _dereq_('./utils/isIOSOlderThan10');
   // Workaround for iOS Safari canvas sizing issues in stereo (webvr-polyfill/issues/102).
   // Only for iOS on versions older than 10.
-  var bufferScale = isIOSOlderThan10(window.navigator.userAgent) ? 1 / window.devicePixelRatio : 1;
+  var bufferScale = isIOSOlderThan10(window.navigator.userAgent)
+    ? 1 / window.devicePixelRatio
+    : 1;
   var WebVRPolyfill = _dereq_('webvr-polyfill');
   var polyfillConfig = {
     BUFFER_SCALE: bufferScale,
     CARDBOARD_UI_DISABLED: true,
-    ROTATE_INSTRUCTIONS_DISABLED: true
+    ROTATE_INSTRUCTIONS_DISABLED: true,
   };
   window.webvrpolyfill = new WebVRPolyfill(polyfillConfig);
 }
@@ -78238,20 +78243,26 @@ if (utils.isIE11) {
 var error = debug('A-Frame:error');
 var warn = debug('A-Frame:warn');
 
-if (window.document.currentScript && window.document.currentScript.parentNode !==
-    window.document.head && !window.debug) {
-  warn('Put the A-Frame <script> tag in the <head> of the HTML *before* the scene to ' +
-       'ensure everything for A-Frame is properly registered before they are used from ' +
-       'HTML.');
+if (
+  window.document.currentScript &&
+  window.document.currentScript.parentNode !== window.document.head &&
+  !window.debug
+) {
+  warn(
+    'Put the A-Frame <script> tag in the <head> of the HTML *before* the scene to ' +
+      'ensure everything for A-Frame is properly registered before they are used from ' +
+      'HTML.'
+  );
 }
 
 // Error if not using a server.
 if (window.location.protocol === 'file:') {
   error(
     'This HTML file is currently being served via the file:// protocol. ' +
-    'Assets, textures, and models WILL NOT WORK due to cross-origin policy! ' +
-    'Please use a local or hosted server: ' +
-    'https://aframe.io/docs/0.5.0/introduction/getting-started.html#using-a-local-server.');
+      'Assets, textures, and models WILL NOT WORK due to cross-origin policy! ' +
+      'Please use a local or hosted server: ' +
+      'https://aframe.io/docs/0.5.0/introduction/getting-started.html#using-a-local-server.'
+  );
 }
 
 _dereq_('present'); // Polyfill `performance.now()`.
@@ -78267,13 +78278,14 @@ var AScene = _dereq_('./core/scene/a-scene').AScene;
 var components = _dereq_('./core/component').components;
 var registerComponent = _dereq_('./core/component').registerComponent;
 var registerGeometry = _dereq_('./core/geometry').registerGeometry;
-var registerPrimitive = _dereq_('./extras/primitives/primitives').registerPrimitive;
+var registerPrimitive = _dereq_('./extras/primitives/primitives')
+  .registerPrimitive;
 var registerShader = _dereq_('./core/shader').registerShader;
 var registerSystem = _dereq_('./core/system').registerSystem;
 var shaders = _dereq_('./core/shader').shaders;
 var systems = _dereq_('./core/system').systems;
 // Exports THREE to window so three.js can be used without alteration.
-var THREE = window.THREE = _dereq_('./lib/three');
+var THREE = (window.THREE = _dereq_('./lib/three'));
 
 var pkg = _dereq_('../package');
 
@@ -78292,9 +78304,11 @@ _dereq_('./core/a-mixin');
 _dereq_('./extras/components/');
 _dereq_('./extras/primitives/');
 
-console.log('8-Frame Version: 0.9.0 (Date 2019-10-04, Commit #1101cc86)');
-console.log('three Version (https://github.com/supermedium/three.js):',
-            pkg.dependencies['super-three']);
+console.log('8-Frame Version: 0.9.0 (Date 2019-10-10, Commit #0d2ba3f3)');
+console.log(
+  'three Version (https://github.com/supermedium/three.js):',
+  pkg.dependencies['super-three']
+);
 console.log('WebVR Polyfill Version:', pkg.dependencies['webvr-polyfill']);
 
 module.exports = window.AFRAME = {
@@ -78313,7 +78327,7 @@ module.exports = window.AFRAME = {
   registerSystem: registerSystem,
   primitives: {
     getMeshMixin: _dereq_('./extras/primitives/getMeshMixin'),
-    primitives: _dereq_('./extras/primitives/primitives').primitives
+    primitives: _dereq_('./extras/primitives/primitives').primitives,
   },
   scenes: _dereq_('./core/scene/scenes'),
   schema: _dereq_('./core/schema'),
@@ -78321,7 +78335,7 @@ module.exports = window.AFRAME = {
   systems: systems,
   THREE: THREE,
   utils: utils,
-  version: pkg.version
+  version: pkg.version,
 };
 
 },{"../package":79,"../vendor/starts-with-polyfill":216,"./components/index":88,"./core/a-assets":125,"./core/a-cubemap":126,"./core/a-entity":127,"./core/a-mixin":128,"./core/a-node":129,"./core/a-register-element":130,"./core/component":131,"./core/geometry":132,"./core/scene/a-scene":134,"./core/scene/scenes":138,"./core/schema":140,"./core/shader":141,"./core/system":142,"./extras/components/":143,"./extras/primitives/":146,"./extras/primitives/getMeshMixin":145,"./extras/primitives/primitives":147,"./geometries/index":168,"./lib/three":179,"./shaders/index":181,"./style/aframe.css":187,"./style/rStats.css":188,"./systems/index":192,"./utils/":205,"./utils/isIOSOlderThan10":207,"animejs":2,"custom-event-polyfill":10,"present":56,"promise-polyfill":57,"webvr-polyfill":74}],178:[function(_dereq_,module,exports){

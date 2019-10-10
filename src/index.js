@@ -7,21 +7,26 @@ if (window.XR && typeof window.XR === 'function') {
 // Polyfill `Promise`.
 window.Promise = window.Promise || require('promise-polyfill');
 
-window.WebVRConfig = window.WebVRConfig || {};
-window.navigator.getVRDisplays = function () { return Promise.resolve([{ displayName: 'noVRDisplay' }]); };
+// window.WebVRConfig = window.WebVRConfig || {};
+// window.navigator.getVRDisplays = function () { return Promise.resolve([{ displayName: 'noVRDisplay' }]); };
 
 // WebVR polyfill
 // Check before the polyfill runs.
-window.hasNativeWebVRImplementation = !!window.navigator.getVRDisplays ||
-                                      !!window.navigator.getVRDevices;
+window.hasNativeWebVRImplementation =
+  !!window.navigator.getVRDisplays || !!window.navigator.getVRDevices;
 window.hasNativeWebXRImplementation = navigator.xr !== undefined;
 
 // If native WebXR or WebVR are defined WebVRPolyfill does not initialize.
-if (!window.hasNativeWebXRImplementation && !window.hasNativeWebVRImplementation) {
+if (
+  !window.hasNativeWebXRImplementation &&
+  !window.hasNativeWebVRImplementation
+) {
   var isIOSOlderThan10 = require('./utils/isIOSOlderThan10');
   // Workaround for iOS Safari canvas sizing issues in stereo (webvr-polyfill/issues/102).
   // Only for iOS on versions older than 10.
-  var bufferScale = isIOSOlderThan10(window.navigator.userAgent) ? 1 / window.devicePixelRatio : 1;
+  var bufferScale = isIOSOlderThan10(window.navigator.userAgent)
+    ? 1 / window.devicePixelRatio
+    : 1;
   var WebVRPolyfill = require('webvr-polyfill');
   var polyfillConfig = {
     BUFFER_SCALE: bufferScale,
@@ -44,20 +49,26 @@ if (utils.isIE11) {
 var error = debug('A-Frame:error');
 var warn = debug('A-Frame:warn');
 
-if (window.document.currentScript && window.document.currentScript.parentNode !==
-    window.document.head && !window.debug) {
-  warn('Put the A-Frame <script> tag in the <head> of the HTML *before* the scene to ' +
-       'ensure everything for A-Frame is properly registered before they are used from ' +
-       'HTML.');
+if (
+  window.document.currentScript &&
+  window.document.currentScript.parentNode !== window.document.head &&
+  !window.debug
+) {
+  warn(
+    'Put the A-Frame <script> tag in the <head> of the HTML *before* the scene to ' +
+      'ensure everything for A-Frame is properly registered before they are used from ' +
+      'HTML.'
+  );
 }
 
 // Error if not using a server.
 if (window.location.protocol === 'file:') {
   error(
     'This HTML file is currently being served via the file:// protocol. ' +
-    'Assets, textures, and models WILL NOT WORK due to cross-origin policy! ' +
-    'Please use a local or hosted server: ' +
-    'https://aframe.io/docs/0.5.0/introduction/getting-started.html#using-a-local-server.');
+      'Assets, textures, and models WILL NOT WORK due to cross-origin policy! ' +
+      'Please use a local or hosted server: ' +
+      'https://aframe.io/docs/0.5.0/introduction/getting-started.html#using-a-local-server.'
+  );
 }
 
 require('present'); // Polyfill `performance.now()`.
@@ -73,13 +84,14 @@ var AScene = require('./core/scene/a-scene').AScene;
 var components = require('./core/component').components;
 var registerComponent = require('./core/component').registerComponent;
 var registerGeometry = require('./core/geometry').registerGeometry;
-var registerPrimitive = require('./extras/primitives/primitives').registerPrimitive;
+var registerPrimitive = require('./extras/primitives/primitives')
+  .registerPrimitive;
 var registerShader = require('./core/shader').registerShader;
 var registerSystem = require('./core/system').registerSystem;
 var shaders = require('./core/shader').shaders;
 var systems = require('./core/system').systems;
 // Exports THREE to window so three.js can be used without alteration.
-var THREE = window.THREE = require('./lib/three');
+var THREE = (window.THREE = require('./lib/three'));
 
 var pkg = require('../package');
 
@@ -98,9 +110,11 @@ require('./core/a-mixin');
 require('./extras/components/');
 require('./extras/primitives/');
 
-console.log('8-Frame Version: 0.9.0 (Date 2019-10-04, Commit #1101cc86)');
-console.log('three Version (https://github.com/supermedium/three.js):',
-            pkg.dependencies['super-three']);
+console.log('8-Frame Version: 0.9.0 (Date 2019-10-10, Commit #0d2ba3f3)');
+console.log(
+  'three Version (https://github.com/supermedium/three.js):',
+  pkg.dependencies['super-three']
+);
 console.log('WebVR Polyfill Version:', pkg.dependencies['webvr-polyfill']);
 
 module.exports = window.AFRAME = {
