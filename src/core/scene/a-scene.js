@@ -789,11 +789,11 @@ module.exports.AScene = registerElement('a-scene', {
           this.tick(this.time, this.delta);
         }
 
-        // Updating per https://github.com/mrdoob/three.js/issues/15849
+        // No longer Updating per https://github.com/mrdoob/three.js/issues/15849
         // to avoid warnings
-        // renderer.render(this.object3D, this.camera, this.renderTarget);
-        renderer.setRenderTarget(this.renderTarget);
-        renderer.render(this.object3D, this.camera);
+        renderer.render(this.object3D, this.camera, this.renderTarget);
+        // renderer.setRenderTarget(this.renderTarget);
+        // renderer.render(this.object3D, this.camera);
       },
       writable: true
     }
