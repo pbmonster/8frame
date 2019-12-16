@@ -110,7 +110,7 @@ require('./core/a-mixin');
 require('./extras/components/');
 require('./extras/primitives/');
 
-console.log('8-Frame Version: 0.9.0 (Date 2019-10-10, Commit #5e192356)');
+console.log('8-Frame Version: 0.9.0 (Date 2019-12-16, Commit #510f9371)');
 console.log(
   'three Version (https://github.com/supermedium/three.js):',
   pkg.dependencies['super-three']

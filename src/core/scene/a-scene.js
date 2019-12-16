@@ -605,7 +605,7 @@ module.exports.AScene = registerElement('a-scene', {
         var rendererConfig;
 
         rendererConfig = {
-          alpha: true,
+          alpha: false,
           antialias: !isMobile,
           canvas: this.canvas,
           logarithmicDepthBuffer: false
@@ -631,6 +631,10 @@ module.exports.AScene = registerElement('a-scene', {
           ) {
             rendererConfig.logarithmicDepthBuffer =
               rendererAttr.logarithmicDepthBuffer === 'true';
+          }
+
+          if (rendererAttr.alpha) {
+            rendererConfig.alpha = rendererAttr.alpha === 'true';
           }
 
           this.maxCanvasSize = {

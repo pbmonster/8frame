@@ -74229,7 +74229,7 @@ var warn = utils.debug('core:a-scene:warn');
 module.exports.AScene = registerElement('a-scene', {
   prototype: Object.create(AEntity.prototype, {
     createdCallback: {
-      value: function() {
+      value: function () {
         this.isIOS = isIOS;
         this.isMobile = isMobile;
         this.hasWebXR = isWebXRAvailable;
@@ -74237,7 +74237,7 @@ module.exports.AScene = registerElement('a-scene', {
         this.isScene = true;
         this.object3D = new THREE.Scene();
         var self = this;
-        this.object3D.onAfterRender = function(renderer, scene, camera) {
+        this.object3D.onAfterRender = function (renderer, scene, camera) {
           // THREE may swap the camera used for the rendering if in VR, so we pass it to tock
           if (self.isPlaying) {
             self.tock(self.time, self.delta, camera);
@@ -74258,23 +74258,23 @@ module.exports.AScene = registerElement('a-scene', {
         this.setAttribute('inspector', '');
         this.setAttribute('keyboard-shortcuts', '');
         this.setAttribute('screenshot', '');
-      },
+      }
     },
 
     addFullScreenStyles: {
-      value: function() {
+      value: function () {
         document.documentElement.classList.add('a-fullscreen');
-      },
+      }
     },
 
     removeFullScreenStyles: {
-      value: function() {
+      value: function () {
         document.documentElement.classList.remove('a-fullscreen');
-      },
+      }
     },
 
     attachedCallback: {
-      value: function() {
+      value: function () {
         var self = this;
         // Renderer initialization
         setupCanvas(this);
@@ -74288,22 +74288,22 @@ module.exports.AScene = registerElement('a-scene', {
         initWakelock(this);
 
         // Camera set up by camera system.
-        this.addEventListener('cameraready', function() {
+        this.addEventListener('cameraready', function () {
           self.attachedCallbackPostCamera();
         });
 
         this.initSystems();
-      },
+      }
     },
 
     attachedCallbackPostCamera: {
-      value: function() {
+      value: function () {
         var resize;
         var self = this;
 
         resize = bind(this.resize, this);
         window.addEventListener('load', resize);
-        window.addEventListener('resize', function() {
+        window.addEventListener('resize', function () {
           // Workaround for a Webkit bug (https://bugs.webkit.org/show_bug.cgi?id=170595)
           // where the window does not contain the correct viewport size
           // after an orientation change. The window size is correct if the operation
@@ -74316,7 +74316,7 @@ module.exports.AScene = registerElement('a-scene', {
           }
         });
 
-        function onPlay() {
+        function onPlay () {
           self.play();
 
           // Add to scene index.
@@ -74329,30 +74329,30 @@ module.exports.AScene = registerElement('a-scene', {
         this.onVRPresentChangeBound = bind(this.onVRPresentChange, this);
 
         // bind functions
-        this.enterVRBound = function() {
+        this.enterVRBound = function () {
           self.enterVR();
         };
-        this.exitVRBound = function() {
+        this.exitVRBound = function () {
           self.exitVR();
         };
-        this.exitVRTrueBound = function() {
+        this.exitVRTrueBound = function () {
           self.exitVR(true);
         };
-        this.pointerRestrictedBound = function() {
+        this.pointerRestrictedBound = function () {
           self.pointerRestricted();
         };
-        this.pointerUnrestrictedBound = function() {
+        this.pointerUnrestrictedBound = function () {
           self.pointerUnrestricted();
         };
       },
-      writable: window.debug,
+      writable: window.debug
     },
 
     /**
      * Initialize all systems.
      */
     initSystems: {
-      value: function() {
+      value: function () {
         var name;
 
         // Initialize camera system first.
@@ -74364,31 +74364,31 @@ module.exports.AScene = registerElement('a-scene', {
           }
           this.initSystem(name);
         }
-      },
+      }
     },
 
     /**
      * Initialize a system.
      */
     initSystem: {
-      value: function(name) {
+      value: function (name) {
         if (this.systems[name]) {
           return;
         }
         this.systems[name] = new systems[name](this);
         this.systemNames.push(name);
-      },
+      }
     },
 
     /**
      * Shut down scene on detach.
      */
     detachedCallback: {
-      value: function() {
+      value: function () {
         // Remove from scene index.
         var sceneIndex = scenes.indexOf(this);
         scenes.splice(sceneIndex, 1);
-      },
+      }
     },
 
     /**
@@ -74397,7 +74397,7 @@ module.exports.AScene = registerElement('a-scene', {
      * @param {object} behavior - A component.
      */
     addBehavior: {
-      value: function(behavior) {
+      value: function (behavior) {
         var behaviorArr;
         var behaviors = this.behaviors;
         var behaviorType;
@@ -74412,17 +74412,17 @@ module.exports.AScene = registerElement('a-scene', {
             behaviorArr.push(behavior);
           }
         }
-      },
+      }
     },
 
     /**
      * For tests.
      */
     getPointerLockElement: {
-      value: function() {
+      value: function () {
         return document.pointerLockElement;
       },
-      writable: window.debug,
+      writable: window.debug
     },
 
     /**
@@ -74430,7 +74430,7 @@ module.exports.AScene = registerElement('a-scene', {
      */
     checkHeadsetConnected: {
       value: utils.device.checkHeadsetConnected,
-      writable: window.debug,
+      writable: window.debug
     },
 
     /**
@@ -74441,7 +74441,7 @@ module.exports.AScene = registerElement('a-scene', {
      * @returns {Promise}
      */
     enterVR: {
-      value: function() {
+      value: function () {
         var self = this;
         var vrDisplay;
         var vrManager = self.renderer.vr;
@@ -74465,15 +74465,15 @@ module.exports.AScene = registerElement('a-scene', {
             vrDisplay
               .requestSession({
                 immersive: true,
-                exclusive: true,
+                exclusive: true
               })
-              .then(function requestSuccess(xrSession) {
+              .then(function requestSuccess (xrSession) {
                 self.xrSession = xrSession;
                 vrManager.setSession(xrSession);
                 xrSession.addEventListener('end', self.exitVRBound);
                 xrSession
                   .requestFrameOfReference('stage')
-                  .then(function(frameOfReference) {
+                  .then(function (frameOfReference) {
                     self.frameOfReference = frameOfReference;
                   });
                 enterVRSuccess();
@@ -74488,8 +74488,8 @@ module.exports.AScene = registerElement('a-scene', {
               .requestPresent([
                 {
                   source: this.canvas,
-                  attributes: { highRefreshRate: this.highRefreshRate },
-                },
+                  attributes: { highRefreshRate: this.highRefreshRate }
+                }
               ])
               .then(enterVRSuccess, enterVRFailure);
           }
@@ -74501,7 +74501,7 @@ module.exports.AScene = registerElement('a-scene', {
         return Promise.resolve();
 
         // Callback that happens on enter VR success or enter fullscreen (any API).
-        function enterVRSuccess() {
+        function enterVRSuccess () {
           self.addState('vr-mode');
           self.emit('enter-vr', { target: self });
           // Lock to landscape orientation on mobile.
@@ -74520,7 +74520,7 @@ module.exports.AScene = registerElement('a-scene', {
           self.resize();
         }
 
-        function enterVRFailure(err) {
+        function enterVRFailure (err) {
           if (err && err.message) {
             throw new Error(
               'Failed to enter VR mode (`requestPresent`): ' + err.message
@@ -74530,7 +74530,7 @@ module.exports.AScene = registerElement('a-scene', {
           }
         }
       },
-      writable: true,
+      writable: true
     },
     /**
      * Call `exitPresent` if WebVR / WebXR or WebVR polyfill.
@@ -74539,7 +74539,7 @@ module.exports.AScene = registerElement('a-scene', {
      * @returns {Promise}
      */
     exitVR: {
-      value: function() {
+      value: function () {
         var self = this;
         var vrDisplay;
         var vrManager = this.renderer.vr;
@@ -74571,7 +74571,7 @@ module.exports.AScene = registerElement('a-scene', {
 
         return Promise.resolve();
 
-        function exitVRSuccess() {
+        function exitVRSuccess () {
           self.removeState('vr-mode');
           // Lock to landscape orientation on mobile.
           if (
@@ -74592,7 +74592,7 @@ module.exports.AScene = registerElement('a-scene', {
           self.emit('exit-vr', { target: self });
         }
 
-        function exitVRFailure(err) {
+        function exitVRFailure (err) {
           if (err && err.message) {
             throw new Error(
               'Failed to exit VR mode (`exitPresent`): ' + err.message
@@ -74602,11 +74602,11 @@ module.exports.AScene = registerElement('a-scene', {
           }
         }
       },
-      writable: true,
+      writable: true
     },
 
     pointerRestricted: {
-      value: function() {
+      value: function () {
         if (this.canvas) {
           var pointerLockElement = this.getPointerLockElement();
           if (
@@ -74622,11 +74622,11 @@ module.exports.AScene = registerElement('a-scene', {
             this.canvas.requestPointerLock();
           }
         }
-      },
+      }
     },
 
     pointerUnrestricted: {
-      value: function() {
+      value: function () {
         var pointerLockElement = this.getPointerLockElement();
         if (
           pointerLockElement &&
@@ -74635,7 +74635,7 @@ module.exports.AScene = registerElement('a-scene', {
         ) {
           document.exitPointerLock();
         }
-      },
+      }
     },
 
     /**
@@ -74643,7 +74643,7 @@ module.exports.AScene = registerElement('a-scene', {
      * `<ESC>` key. For example, GearVR back button on Oculus Browser.
      */
     onVRPresentChange: {
-      value: function(evt) {
+      value: function (evt) {
         // Polyfill places display inside the detail property
         var display = evt.display || evt.detail.display;
         // Entering VR.
@@ -74653,7 +74653,7 @@ module.exports.AScene = registerElement('a-scene', {
         }
         // Exiting VR.
         this.exitVR();
-      },
+      }
     },
 
     /**
@@ -74661,13 +74661,13 @@ module.exports.AScene = registerElement('a-scene', {
      * If system exists, then return system data rather than possible component data.
      */
     getAttribute: {
-      value: function(attr) {
+      value: function (attr) {
         var system = this.systems[attr];
         if (system) {
           return system.data;
         }
         return AEntity.prototype.getAttribute.call(this, attr);
-      },
+      }
     },
 
     /**
@@ -74675,12 +74675,12 @@ module.exports.AScene = registerElement('a-scene', {
      * what `getAttribute` is now. Now legacy code.
      */
     getComputedAttribute: {
-      value: function(attr) {
+      value: function (attr) {
         warn(
           '`getComputedAttribute` is deprecated. Use `getAttribute` instead.'
         );
         this.getAttribute(attr);
-      },
+      }
     },
 
     /**
@@ -74688,13 +74688,13 @@ module.exports.AScene = registerElement('a-scene', {
      * If system exists, then return system data rather than possible component data.
      */
     getDOMAttribute: {
-      value: function(attr) {
+      value: function (attr) {
         var system = this.systems[attr];
         if (system) {
           return system.data;
         }
         return AEntity.prototype.getDOMAttribute.call(this, attr);
-      },
+      }
     },
 
     /**
@@ -74703,7 +74703,7 @@ module.exports.AScene = registerElement('a-scene', {
      * setAttribute.
      */
     setAttribute: {
-      value: function(attr, value, componentPropValue) {
+      value: function (attr, value, componentPropValue) {
         var system = this.systems[attr];
         if (system) {
           ANode.prototype.setAttribute.call(this, attr, value);
@@ -74716,14 +74716,14 @@ module.exports.AScene = registerElement('a-scene', {
           value,
           componentPropValue
         );
-      },
+      }
     },
 
     /**
      * @param {object} behavior - A component.
      */
     removeBehavior: {
-      value: function(behavior) {
+      value: function (behavior) {
         var behaviorArr;
         var behaviorType;
         var behaviors = this.behaviors;
@@ -74741,11 +74741,11 @@ module.exports.AScene = registerElement('a-scene', {
             behaviorArr.splice(index, 1);
           }
         }
-      },
+      }
     },
 
     resize: {
-      value: function() {
+      value: function () {
         var camera = this.camera;
         var canvas = this.canvas;
         var embedded;
@@ -74785,11 +74785,11 @@ module.exports.AScene = registerElement('a-scene', {
         this.renderer.setSize(size.width, size.height, false);
         this.emit('rendererresize', null, false);
       },
-      writable: true,
+      writable: true
     },
 
     setupRenderer: {
-      value: function() {
+      value: function () {
         var self = this;
         var renderer;
         var rendererAttr;
@@ -74797,10 +74797,10 @@ module.exports.AScene = registerElement('a-scene', {
         var rendererConfig;
 
         rendererConfig = {
-          alpha: true,
+          alpha: false,
           antialias: !isMobile,
           canvas: this.canvas,
-          logarithmicDepthBuffer: false,
+          logarithmicDepthBuffer: false
         };
 
         this.maxCanvasSize = { height: 1920, width: 1920 };
@@ -74825,13 +74825,17 @@ module.exports.AScene = registerElement('a-scene', {
               rendererAttr.logarithmicDepthBuffer === 'true';
           }
 
+          if (rendererAttr.alpha) {
+            rendererConfig.alpha = rendererAttr.alpha === 'true';
+          }
+
           this.maxCanvasSize = {
             width: rendererAttr.maxCanvasWidth
               ? parseInt(rendererAttr.maxCanvasWidth)
               : this.maxCanvasSize.width,
             height: rendererAttr.maxCanvasHeight
               ? parseInt(rendererAttr.maxCanvasHeight)
-              : this.maxCanvasSize.height,
+              : this.maxCanvasSize.height
           };
         }
 
@@ -74841,12 +74845,12 @@ module.exports.AScene = registerElement('a-scene', {
         if (this.camera) {
           renderer.vr.setPoseTarget(this.camera.el.object3D);
         }
-        this.addEventListener('camera-set-active', function() {
+        this.addEventListener('camera-set-active', function () {
           renderer.vr.setPoseTarget(self.camera.el.object3D);
         });
         loadingScreen.setup(this, getCanvasSize);
       },
-      writable: window.debug,
+      writable: window.debug
     },
 
     /**
@@ -74854,7 +74858,7 @@ module.exports.AScene = registerElement('a-scene', {
      * Scene waits for all entities to load.
      */
     play: {
-      value: function() {
+      value: function () {
         var self = this;
         var sceneEl = this;
 
@@ -74863,7 +74867,7 @@ module.exports.AScene = registerElement('a-scene', {
           return;
         }
 
-        this.addEventListener('loaded', function() {
+        this.addEventListener('loaded', function () {
           AEntity.prototype.play.call(this); // .play() *before* render.
 
           if (sceneEl.renderStarted) {
@@ -74887,10 +74891,10 @@ module.exports.AScene = registerElement('a-scene', {
         });
 
         // setTimeout to wait for all nodes to attach and run their callbacks.
-        setTimeout(function() {
+        setTimeout(function () {
           AEntity.prototype.load.call(self);
         });
-      },
+      }
     },
 
     /**
@@ -74898,12 +74902,12 @@ module.exports.AScene = registerElement('a-scene', {
      * (aframevr/aframe#2365).
      */
     updateComponent: {
-      value: function(componentName) {
+      value: function (componentName) {
         if (componentName in systems) {
           return;
         }
         AEntity.prototype.updateComponent.apply(this, arguments);
-      },
+      }
     },
 
     /**
@@ -74912,7 +74916,7 @@ module.exports.AScene = registerElement('a-scene', {
      * needing to render.
      */
     tick: {
-      value: function(time, timeDelta) {
+      value: function (time, timeDelta) {
         var i;
         var systems = this.systems;
 
@@ -74931,7 +74935,7 @@ module.exports.AScene = registerElement('a-scene', {
           }
           systems[this.systemNames[i]].tick(time, timeDelta);
         }
-      },
+      }
     },
 
     /**
@@ -74940,7 +74944,7 @@ module.exports.AScene = registerElement('a-scene', {
      * needing to render.
      */
     tock: {
-      value: function(time, timeDelta, camera) {
+      value: function (time, timeDelta, camera) {
         var i;
         var systems = this.systems;
 
@@ -74959,7 +74963,7 @@ module.exports.AScene = registerElement('a-scene', {
           }
           systems[this.systemNames[i]].tock(time, timeDelta, camera);
         }
-      },
+      }
     },
 
     /**
@@ -74970,7 +74974,7 @@ module.exports.AScene = registerElement('a-scene', {
      * Renders with request animation frame.
      */
     render: {
-      value: function(time, frame) {
+      value: function (time, frame) {
         var renderer = this.renderer;
 
         this.frame = frame;
@@ -74987,9 +74991,9 @@ module.exports.AScene = registerElement('a-scene', {
         // renderer.setRenderTarget(this.renderTarget);
         // renderer.render(this.object3D, this.camera);
       },
-      writable: true,
-    },
-  }),
+      writable: true
+    }
+  })
 });
 
 /**
@@ -75002,11 +75006,11 @@ module.exports.AScene = registerElement('a-scene', {
  * @param {object} max - Max size parameters
  * @param {boolean} isVR - If in VR
  */
-function getCanvasSize(canvasEl, embedded, maxSize, isVR) {
+function getCanvasSize (canvasEl, embedded, maxSize, isVR) {
   if (embedded) {
     return {
       height: canvasEl.parentElement.offsetHeight,
-      width: canvasEl.parentElement.offsetWidth,
+      width: canvasEl.parentElement.offsetWidth
     };
   }
   return getMaxSize(maxSize, isVR);
@@ -75021,14 +75025,14 @@ function getCanvasSize(canvasEl, embedded, maxSize, isVR) {
  * @param {boolean} isVR - If in VR.
  * @returns {object} Width and height.
  */
-function getMaxSize(maxSize, isVR) {
+function getMaxSize (maxSize, isVR) {
   var aspectRatio;
   var size;
   var pixelRatio = window.devicePixelRatio;
 
   size = {
     height: document.body.offsetHeight,
-    width: document.body.offsetWidth,
+    width: document.body.offsetWidth
   };
   if (!maxSize || isVR || (maxSize.width === -1 && maxSize.height === -1)) {
     return size;
@@ -75056,7 +75060,7 @@ function getMaxSize(maxSize, isVR) {
   return size;
 }
 
-function requestFullscreen(canvas) {
+function requestFullscreen (canvas) {
   var requestFullscreen =
     canvas.requestFullscreen ||
     canvas.webkitRequestFullscreen ||
@@ -75065,7 +75069,7 @@ function requestFullscreen(canvas) {
   requestFullscreen.apply(canvas);
 }
 
-function exitFullscreen() {
+function exitFullscreen () {
   if (document.exitFullscreen) {
     document.exitFullscreen();
   } else if (document.mozCancelFullScreen) {
@@ -75075,7 +75079,7 @@ function exitFullscreen() {
   }
 }
 
-function setupCanvas(sceneEl) {
+function setupCanvas (sceneEl) {
   var canvasEl;
 
   canvasEl = document.createElement('canvas');
@@ -75089,7 +75093,7 @@ function setupCanvas(sceneEl) {
   document.addEventListener('webkitfullscreenchange', onFullScreenChange);
 
   // Prevent overscroll on mobile.
-  canvasEl.addEventListener('touchmove', function(event) {
+  canvasEl.addEventListener('touchmove', function (event) {
     event.preventDefault();
   });
 
@@ -75100,7 +75104,7 @@ function setupCanvas(sceneEl) {
   // entering/exiting fullscreen.
   setTimeout(bind(sceneEl.resize, sceneEl), 0);
 
-  function onFullScreenChange() {
+  function onFullScreenChange () {
     var fullscreenEl =
       document.fullscreenElement ||
       document.mozFullScreenElement ||
@@ -76952,7 +76956,7 @@ _dereq_('./core/a-mixin');
 _dereq_('./extras/components/');
 _dereq_('./extras/primitives/');
 
-console.log('8-Frame Version: 0.9.0 (Date 2019-10-10, Commit #5e192356)');
+console.log('8-Frame Version: 0.9.0 (Date 2019-12-16, Commit #510f9371)');
 console.log(
   'three Version (https://github.com/supermedium/three.js):',
   pkg.dependencies['super-three']
